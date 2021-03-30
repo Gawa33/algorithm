@@ -1,8 +1,9 @@
 package com.gawa.algorithm.linear;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-public class SequenceList<T> {
+public class SequenceList<T> implements Iterable<T> {
     //存储元素的数组
     private T[] eles;
     //记录当前顺序表中的元素个数
@@ -11,7 +12,7 @@ public class SequenceList<T> {
     //构造方法
     public SequenceList(int capacity) {
         //初始化数据
-        this.eles = (T[]) new Objects[capacity];
+        this.eles = (T[])new Objects[capacity];
         //初始化长度
         this.N = 0;
     }
@@ -44,11 +45,13 @@ public class SequenceList<T> {
     //在i元素处插入元素t
     public void insert(int i,T t){
         //先把i索引处的元素及其后面的元素依次向后移动一位
-        for (int index=N-1;index>i;index--){
+        for (int index=N;index>i;index--){
             eles[index]=eles[index-1];
         }
         //再把元素放到i索引处即可
         eles[i]=t;
+        //元素个数+1
+        N++;
     }
 
     //删除指定位置i出的元素，并返回该元素
@@ -75,4 +78,23 @@ public class SequenceList<T> {
     }
 
 
+    @Override
+    public Iterator<T> iterator() {
+        return new SIterator();
+    }
+
+    private class SIterator implements Iterator{
+        private int cusor;
+        public SIterator(){
+            this.cusor=0;
+        }
+        @Override
+        public boolean hasNext() {
+            return cusor<N;
+        }
+        @Override
+        public Object next() {
+            return eles[cusor++];
+        }
+    }
 }
