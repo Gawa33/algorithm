@@ -3,6 +3,7 @@ package com.gawa.algorithm.linear;
 import java.util.Iterator;
 import java.util.Objects;
 
+//线性表
 public class SequenceList<T> implements Iterable<T> {
     //存储元素的数组
     private T[] eles;
