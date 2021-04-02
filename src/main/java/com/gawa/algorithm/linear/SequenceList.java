@@ -13,7 +13,7 @@ public class SequenceList<T> implements Iterable<T> {
     //构造方法
     public SequenceList(int capacity) {
         //初始化数据
-        this.eles = (T[])new Objects[capacity];
+        this.eles = (T[]) new Objects[capacity];
         //初始化长度
         this.N = 0;
     }
@@ -40,17 +40,23 @@ public class SequenceList<T> implements Iterable<T> {
 
     //向线性表中添加元素t
     public void insert(T t) {
+        if (N==eles.length){
+            resize(2*eles.length);
+        }
         eles[N++] = t;
     }
 
     //在i元素处插入元素t
-    public void insert(int i,T t){
+    public void insert(int i, T t) {
+        if (N==eles.length){
+            resize(2*eles.length);
+        }
         //先把i索引处的元素及其后面的元素依次向后移动一位
-        for (int index=N;index>i;index--){
-            eles[index]=eles[index-1];
+        for (int index = N; index > i; index--) {
+            eles[index] = eles[index - 1];
         }
         //再把元素放到i索引处即可
-        eles[i]=t;
+        eles[i] = t;
         //元素个数+1
         N++;
     }
@@ -60,39 +66,56 @@ public class SequenceList<T> implements Iterable<T> {
         //记录索引i处的值
         T current = eles[i];
         //索引i后面元素依次向前移动几位即可
-        for (int index=i;index<N-1;index++){
-            eles[index]=eles[index+1];
+        for (int index = i; index < N - 1; index++) {
+            eles[index] = eles[index + 1];
         }
         //元素个数-1
         N--;
+        if (N<eles.length/4){
+            resize(eles.length/2);
+        }
         return current;
     }
 
     //查找元素第一次出现的位置
     public int indexof(T t) {
-        for (int i =0;i<N;i++){
-            if (eles[i].equals(t)){
+        for (int i = 0; i < N; i++) {
+            if (eles[i].equals(t)) {
                 return i;
             }
         }
         return -1;
     }
 
+    //根据参数newSize，重置eles的大小
+    public void resize(int newSize) {
+        //定义一个临时数组，指向原数组
+        T[] temp = eles;
+        //创建新数组
+        eles = (T[]) new Objects[newSize];
+        //把原数组的数据拷贝到新数组即可
+        for (int i = 0; i < N; i++) {
+            eles[i] = temp[i];
+        }
+    }
 
     @Override
     public Iterator<T> iterator() {
         return new SIterator();
     }
 
-    private class SIterator implements Iterator{
+    private class SIterator implements Iterator {
         private int cusor;
-        public SIterator(){
-            this.cusor=0;
+
+        public SIterator() {
+            this.cusor = 0;
         }
+
         @Override
         public boolean hasNext() {
-            return cusor<N;
+            return cusor < N;
         }
+
         @Override
         public Object next() {
             return eles[cusor++];
